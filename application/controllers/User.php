@@ -5,12 +5,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class User extends CI_Controller {
 
     public function login() {
-    
-       $this->load->view('user/login');
+
+        $this->load->view('user/login');
     }
 
     public function register() {
-        $this->load->view('user/register');
+        $genders = $this->User_model->loadGender();
+        $instruments = $this->User_model->loadInstrument();
+        $data['gender'] = $genders;
+        $data['instrument'] = $instruments;
+
+
+
+        $this->load->view('user/register', $data);
     }
 
     public function authenticate() {
@@ -33,27 +40,41 @@ class User extends CI_Controller {
 
         $this->load->view('user/list', $data);
     }
+    
+    
+    public function search() {
+        $data['data'] = "Ingrese una busqueda";
+        $this->load->view('user/search', $data);
+    }
+    public function searchUser() {
+        $data['data'] = "Ingrese una busqueda";
+        $this->load->view('user/search', $data);
+    }
 
     public function save() {
-        // get the params
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+
+        $us = $_FILES["image"];
+        $data = file_get_contents($us['tmp_name']);
         $first_name = $this->input->post('first_name');
         $last_name = $this->input->post('last_name');
-
+        $mail = $this->input->post('email');
+        $address = $this->input->post('address');
+        $username = $this->input->post('username');
+        $password = $this->input->post('password');
+        $instruments['instruments'] = $this->input->post('instruments');
+        $genders['genders'] = $this->input->post('genders');
         $user = array(
-            'username' => $username,
-            'password' => $password,
-            'first_name' => $first_name,
-            'last_name' => $last_name
+            'foto' => $data,
+            'nombre' => $first_name,
+            'apellidos' => $last_name,
+            'email' => $mail,
+            'direccion' => $address,
+            'usuario' => $username,
+            'contrasena' => $password,
         );
-        // call the model to save
-        $r = $this->User_model->save($user);
-
-        // redirect
+        $r = $this->User_model->save($user, $instruments, $genders);
         if ($r) {
-            // $this->session->set_flashdata('message', 'User saved');
-       redirect('user/login');
+            redirect('user/login');
 //            redirect('http://localhost:8080/codeigniter-master/index.php/login');
         } else {
             // $this->session->set_flashdata('message', 'There was an error saving the user');
@@ -106,7 +127,7 @@ class User extends CI_Controller {
         // call the model to save
         $r = $this->User_model->editUser($id, $user);
         if ($r) {
-             redirect('http://localhost:8080/codeigniter-master/index.php/user/listAll');
+            redirect('http://localhost:8080/codeigniter-master/index.php/user/listAll');
         }
     }
 

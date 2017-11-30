@@ -91,11 +91,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <tbody>
                         <?php foreach ($users as $index => $user) { ?>
                             <tr>
-                                <td><?php echo $user->username; ?></td>
-                                <td><?php echo $user->first_name; ?></td>
-                                <td><?php echo $user->last_name; ?></td>
-                                <td><a href="<?php echo ''. base_url().'index.php/user/delete/'.$user->id_user; ?>">Eliminar</a></td>
-                                <td><a href="<?php echo ''. base_url().'index.php/user/edit/'.$user->id_user; ?>">Editar</a></td>
+                                <td><?php echo $user->usuario; ?></td>
+                                <td><?php echo $user->apellidos; ?></td>
+                                <td><img id="image-profile" src="data:image/jpeg;base64,<?php echo base64_encode($user->foto); ?>"/></td>
+                                <td><a href="<?php echo ''. base_url().'index.php/user/delete/'.$user->id_usuario; ?>">Eliminar</a></td>
+                                <td><a href="<?php echo ''. base_url().'index.php/user/edit/'.$user->id_usuario; ?>">Editar</a></td>
                             </tr>	
                         <?php } ?>
 

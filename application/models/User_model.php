@@ -8,14 +8,43 @@ class User_model extends CI_Model {
         return $query->result_object();
     }
 
-    function save($user) {
-        $user['password'] = md5($user['password']);
-        $r = $this->db->insert('users', $user);
-        return $r;
+    function save($user, $instruments, $garders) {
+        $this->db->set($user);
+        $this->db->insert($this->db->dbprefix . 'usuario');
+        $insert_id = $this->db->insert_id();
+        for ($i = 0; $i < count($instruments['instruments']); $i++) {
+            $data = array(
+                'fk_usuario' => $insert_id,
+                'fk_instrumento' => $instruments['instruments'][$i]
+            );
+            if (!$this->db->insert('usuario_instrumento', $data)) {
+                return FALSE;
+            }
+        }
+        for ($j = 0; $j < count($garders['genders']); $j++) {
+            $data = array(
+                'fk_usuario' => $insert_id,
+                'fk_genero' => $garders['genders'][$j]
+            );
+            if (!$this->db->insert('usuario_genero', $data)) {
+                return FALSE;
+            }
+        }
+        return true;
     }
 
     function all() {
-        $query = $this->db->get('users');
+        $query = $this->db->get('usuario');
+        return $query->result_object();
+    }
+
+    function loadGender() {
+        $query = $this->db->get('genero');
+        return $query->result_object();
+    }
+
+    function loadInstrument() {
+        $query = $this->db->get('intrumento');
         return $query->result_object();
     }
 
