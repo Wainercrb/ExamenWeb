@@ -11,21 +11,52 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <div class="container">
         <div class="row">
-            <form method="POST" action="user/search"enctype="multipart/form-data">
+            <form method="POST" action="<?php echo base_url() . 'index.php/user/search' ?>"enctype="multipart/form-data">
                 <div class="form-group">
-                    <h1 class="text-center"><?php echo $data ?> </h1>
+                    <h1 class="text-center"  size="50px" style="color: #ffffff"><?php echo $data ?> </h1>
                     <label class="col-md-4 control-label" for="selectbasic"></label>
                     <div class="col-lg-6">
                         <input type="text" placeholder="Buscar..." class="input" id="input-buscar" name="valor"/>
-                        <select name="tipoFiltro" class="selectpicker" id="search-select">
-                            <option value="intrumento">genero</option>
-                            <option value="genero">intrumeto</option>
-                        </select>
                         <button name="buscarValor" class="btn btn-default" type="submit">Buscar</button>
                     </div>
                 </div>
             </form>
         </div>
+        <br>
+        <br>
+        <br>
+        <br>
+        <?php if (isset($users)) { ?>
+            <div id="container" class="container">
+                <div class="table-responsive">
+                    <table class="table table-hover" style="background-color: #ffffff">
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Apellidos</th>
+                                <th>Email</th>
+                                <th>Dirección</th>
+                                <th>Ver</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($users as $index => $user) { ?>
+                                <tr>
+                                    <td><?php echo $user->nombre; ?></td>
+                                    <td><?php echo $user->apellidos; ?></td>
+                                    <td><?php echo $user->email; ?></td>
+                                    <td><?php echo $user->direccion; ?></td>
+                                    <td><a href="<?php echo '' . base_url() . 'index.php/user/see/'.$user->id_usuario; ?>">Editar</a></td>
+                                </tr>	
+                            <?php } ?>
+
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        <?php } ?>
     </div>
     <style>
         body{

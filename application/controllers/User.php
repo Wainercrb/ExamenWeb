@@ -40,12 +40,20 @@ class User extends CI_Controller {
 
         $this->load->view('user/list', $data);
     }
-    
-    
+
     public function search() {
-        $data['data'] = "Ingrese una busqueda";
-        $this->load->view('user/search', $data);
+        if (isset($_POST['valor']) && ($_POST['valor'] != "")) {
+            $valor = $this->input->post('valor');
+            $users = $this->User_model->search($valor);
+            $data['users'] = $users;
+            $data['data'] = 'valor buscado: ' . $valor . ' en genero y intrumento';
+            $this->load->view('user/search', $data);
+        } else {
+            $data['data'] = "Ingrese una busqueda";
+            $this->load->view('user/search', $data);
+        }
     }
+
     public function searchUser() {
         $data['data'] = "Ingrese una busqueda";
         $this->load->view('user/search', $data);
@@ -97,6 +105,23 @@ class User extends CI_Controller {
         $usurarioCargado = $this->User_model->UsuarioCargado($id);
 
 
+        if ($usurarioCargado != FALSE) {
+            $data = array(
+                'id' => $id,
+                'username' => $usurarioCargado->username,
+                'password' => $usurarioCargado->password,
+                'first_name' => $usurarioCargado->first_name,
+                'last_name' => $usurarioCargado->last_name
+            );
+        } else {
+            return FALSE;
+        }
+        $this->load->view('user/editar', $data);
+    }
+
+    public function see($param) {
+        $id = $this->uri->segment(3);
+        $usurarioCargado = $this->User_model->UsuarioCargado($id);
         if ($usurarioCargado != FALSE) {
             $data = array(
                 'id' => $id,

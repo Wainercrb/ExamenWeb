@@ -38,6 +38,13 @@ class User_model extends CI_Model {
         return $query->result_object();
     }
 
+    function search($valor) {
+        $sql = "SELECT DISTINCT  u.id_usuario, u.foto, u.nombre, u.apellidos, u.email, u.direccion, u.usuario, u.contrasena FROM usuario u, genero g, usuario_genero ug, usuario_instrumento ui, intrumento i WHERE (ug.fk_usuario = u.id_usuario AND ug.fk_genero = g.id_genero AND g.genero LIKE '$valor') OR (ui.fk_instrumento = i.id_intrumento AND ui.fk_usuario = u.id_usuario AND i.intrumento LIKE '$valor')";        
+      
+        $query = $this->db->query($sql);
+        return $query->result_object();
+    }
+
     function loadGender() {
         $query = $this->db->get('genero');
         return $query->result_object();
@@ -55,7 +62,7 @@ class User_model extends CI_Model {
     }
 
     function UsuarioCargado($id) {
-        $query = $this->db->select("*")->from("users")->where("id_user", $id)->get();
+        $query = $this->db->select("*")->from("usuario")->where("id_usuario", $id)->get();
         if ($query->num_rows() > 0) {
             return $query->row();
         } else {
