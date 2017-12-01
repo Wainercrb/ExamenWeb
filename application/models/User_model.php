@@ -56,12 +56,6 @@ class User_model extends CI_Model {
         return $query->result_object();
     }
 
-    function delete($id) {
-        $this->db->where('id_user', $id);
-        $r = $this->db->delete('users');
-        return $r;
-    }
-
     function UsuarioCargado($id) {
         $query = $this->db->select("*")->from("usuario")->where("id_usuario", $id)->get();
         if ($query->num_rows() > 0) {
@@ -70,11 +64,4 @@ class User_model extends CI_Model {
             return FALSE;
         }
     }
-
-    function editUser($id, $user) {
-        $this->db->where('id_user', $id);
-        $r = $this->db->update('users', $user);
-        return $r;
-    }
-
 }

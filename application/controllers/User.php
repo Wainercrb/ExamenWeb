@@ -5,7 +5,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class User extends CI_Controller {
 
     public function login() {
-
         $this->load->view('user/login');
     }
 
@@ -26,16 +25,10 @@ class User extends CI_Controller {
             $data['data'] = "Ingrese una busqueda";
             $this->load->view('user/search', $data);
         } else {
-            echo "Invalid user name or password";
+            echo "Invalid user name or password, click back";
         }
     }
 
-    public function listAll() {
-        $users = $this->User_model->all();
-        $data['users'] = $users;
-        $data['title'] = 'List of Users';
-        $this->load->view('user/list', $data);
-    }
 
     public function search() {
         if (isset($_POST['valor']) && ($_POST['valor'] != "")) {
@@ -56,7 +49,6 @@ class User extends CI_Controller {
     }
 
     public function save() {
-
         $us = $_FILES["image"];
         $data = file_get_contents($us['tmp_name']);
         $first_name = $this->input->post('first_name');
@@ -84,35 +76,6 @@ class User extends CI_Controller {
         }
     }
 
-    public function delete($param) {
-        $id = $this->uri->segment(3);
-        $r = $this->User_model->delete($id);
-        if ($r) {
-            redirect('http://localhost:8080/codeigniter-master/index.php/user/listAll');
-        } else {
-            
-        }
-    }
-
-    public function edit($param) {
-        $id = $this->uri->segment(3);
-        $usurarioCargado = $this->User_model->UsuarioCargado($id);
-
-
-        if ($usurarioCargado != FALSE) {
-            $data = array(
-                'id' => $id,
-                'username' => $usurarioCargado->username,
-                'password' => $usurarioCargado->password,
-                'first_name' => $usurarioCargado->first_name,
-                'last_name' => $usurarioCargado->last_name
-            );
-        } else {
-            return FALSE;
-        }
-        $this->load->view('user/editar', $data);
-    }
-
     public function see($param) {
         $id = $this->uri->segment(3);
         $usurarioCargado = $this->User_model->UsuarioCargado($id);
@@ -130,26 +93,6 @@ class User extends CI_Controller {
             return FALSE;
         }
         $this->load->view('user/seeProfile', $data);
-    }
-
-    public function editarUsuario($param) {
-        $id = $this->uri->segment(3);
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
-        $first_name = $this->input->post('first_name');
-        $last_name = $this->input->post('last_name');
-
-        $user = array(
-            'username' => $username,
-            'password' => $password,
-            'first_name' => $first_name,
-            'last_name' => $last_name
-        );
-        // call the model to save
-        $r = $this->User_model->editUser($id, $user);
-        if ($r) {
-            redirect('http://localhost:8080/codeigniter-master/index.php/user/listAll');
-        }
     }
 
 }
