@@ -14,9 +14,6 @@ class User extends CI_Controller {
         $instruments = $this->User_model->loadInstrument();
         $data['gender'] = $genders;
         $data['instrument'] = $instruments;
-
-
-
         $this->load->view('user/register', $data);
     }
 
@@ -26,7 +23,8 @@ class User extends CI_Controller {
         $r = $this->User_model->authenticate($username, $password);
         if (count($r) > 0) {
             $user = $r[0];
-            echo "Welcome {$user->first_name}";
+            $data['data'] = "Ingrese una busqueda";
+            $this->load->view('user/search', $data);
         } else {
             echo "Invalid user name or password";
         }
@@ -34,10 +32,8 @@ class User extends CI_Controller {
 
     public function listAll() {
         $users = $this->User_model->all();
-
         $data['users'] = $users;
         $data['title'] = 'List of Users';
-
         $this->load->view('user/list', $data);
     }
 
@@ -83,9 +79,7 @@ class User extends CI_Controller {
         $r = $this->User_model->save($user, $instruments, $genders);
         if ($r) {
             redirect('user/login');
-//            redirect('http://localhost:8080/codeigniter-master/index.php/login');
         } else {
-            // $this->session->set_flashdata('message', 'There was an error saving the user');
             redirect('user/register');
         }
     }
@@ -124,16 +118,18 @@ class User extends CI_Controller {
         $usurarioCargado = $this->User_model->UsuarioCargado($id);
         if ($usurarioCargado != FALSE) {
             $data = array(
-                'id' => $id,
-                'username' => $usurarioCargado->username,
-                'password' => $usurarioCargado->password,
-                'first_name' => $usurarioCargado->first_name,
-                'last_name' => $usurarioCargado->last_name
+                'id_usuario' => $id,
+                'foto' => $usurarioCargado->foto,
+                'nombre' => $usurarioCargado->nombre,
+                'apellidos' => $usurarioCargado->apellidos,
+                'email' => $usurarioCargado->email,
+                'direccion' => $usurarioCargado->direccion,
+                'titulo' => 'Informacion del perfil usuario',
             );
         } else {
             return FALSE;
         }
-        $this->load->view('user/editar', $data);
+        $this->load->view('user/seeProfile', $data);
     }
 
     public function editarUsuario($param) {
