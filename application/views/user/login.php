@@ -75,7 +75,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="container">
             <div class="row">
                 <div class="col-md-4 col-md-offset-4">
-                    <form method="POST" role="form" action="index.php/user/authenticate">
+                    <form method="POST" role="form" action="<?php  echo base_url()."index.php/user/authenticate"?>">
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h3 class="panel-title">Please sign in</h3>

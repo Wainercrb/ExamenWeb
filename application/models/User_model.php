@@ -3,13 +3,15 @@
 class User_model extends CI_Model {
 
     function authenticate($user, $pass) {
+        $pass = md5($pass);
         $query = $this->db->get_where('usuario', array('usuario' => $user, 'contrasena' => $pass));
         return $query->result_object();
     }
 
     function save($user, $instruments, $garders) {
-        $this->db->set($user);
-        $this->db->insert($this->db->dbprefix . 'usuario');
+        $contrasena['contrasena'] = md5($user['contrasena']);
+        $this->db->set($user, $contrasena);
+        $this->db->insert($this->db->dbprefix . 'usuario', $contrasena);
         $insert_id = $this->db->insert_id();
         for ($i = 0; $i < count($instruments['instruments']); $i++) {
             $data = array(
@@ -38,8 +40,8 @@ class User_model extends CI_Model {
     }
 
     function search($valor) {
-        $sql = "SELECT DISTINCT  u.id_usuario, u.foto, u.nombre, u.apellidos, u.email, u.direccion, u.usuario, u.contrasena FROM usuario u, genero g, usuario_genero ug, usuario_instrumento ui, intrumento i WHERE (ug.fk_usuario = u.id_usuario AND ug.fk_genero = g.id_genero AND g.genero LIKE '$valor') OR (ui.fk_instrumento = i.id_intrumento AND ui.fk_usuario = u.id_usuario AND i.intrumento LIKE '$valor')";        
-      
+        $sql = "SELECT DISTINCT  u.id_usuario, u.foto, u.nombre, u.apellidos, u.email, u.direccion, u.usuario, u.contrasena FROM usuario u, genero g, usuario_genero ug, usuario_instrumento ui, intrumento i WHERE (ug.fk_usuario = u.id_usuario AND ug.fk_genero = g.id_genero AND g.genero LIKE '$valor') OR (ui.fk_instrumento = i.id_intrumento AND ui.fk_usuario = u.id_usuario AND i.intrumento LIKE '$valor')";
+
         $query = $this->db->query($sql);
         return $query->result_object();
     }
